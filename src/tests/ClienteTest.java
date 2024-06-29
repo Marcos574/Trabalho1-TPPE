@@ -3,6 +3,9 @@ package tests;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
+import main.Cliente;
+import main.Endereco;
+
 public class ClienteTest {
 
     @Test
