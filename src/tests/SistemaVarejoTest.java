@@ -4,6 +4,8 @@ import main.Cliente;
 import main.Endereco;
 import main.Produto;
 import main.SistemaVarejo;
+import main.Venda;
+
 import org.junit.Test;
 import java.util.Arrays;
 import java.util.Date;
