@@ -2,6 +2,7 @@ package tests;
 
 import main.Cliente;
 import main.Endereco;
+import main.Produto;
 import main.SistemaVarejo;
 
 import org.junit.Test;
