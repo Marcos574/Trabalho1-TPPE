@@ -20,5 +20,16 @@ public class SistemaVarejoTest {
         assertEquals(1, sistema.getClientes().size());
         assertEquals(cliente, sistema.getClientes().get(0));
     }
+    
+    @Test
+    public void deveCadastrarProduto() {
+        SistemaVarejo sistema = new SistemaVarejo();
+        Produto produto = new Produto("001", "Produto 1", 10.0, "unidade");
+        
+        sistema.cadastrarProduto(produto);
+        
+        assertEquals(1, sistema.getProdutos().size());
+        assertEquals(produto, sistema.getProdutos().get(0));
+    }
 }
 
