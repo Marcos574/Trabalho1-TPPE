@@ -1,11 +1,11 @@
-package tests;
+package com.tppe.app;
+
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import main.Produto;
 
 import static org.junit.Assert.*;
 

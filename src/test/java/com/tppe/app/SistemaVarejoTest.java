@@ -1,10 +1,5 @@
-package tests;
+package com.tppe.app;
 
-import main.Cliente;
-import main.Endereco;
-import main.Produto;
-import main.SistemaVarejo;
-import main.Venda;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

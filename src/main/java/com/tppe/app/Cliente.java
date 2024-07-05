@@ -1,4 +1,4 @@
-package main;
+package com.tppe.app;
 
 public class Cliente {
     private String nome;

@@ -1,4 +1,4 @@
-package main;
+package com.tppe.app;
 
 public class Produto {
     private String codigo;
