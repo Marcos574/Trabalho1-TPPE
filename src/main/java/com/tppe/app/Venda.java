@@ -28,21 +28,21 @@ public class Venda {
         this.cliente = cliente;
         this.produtos = produtos;
         this.numCartao = numCartao;
-        calcularValores();
+        //calcularValores();
     }
 
 
 
-    private void calcularValores() {
-        double valorProdutos = produtos.stream().mapToDouble(Produto::getValorVenda).sum();
-        this.desconto = valorProdutos * (100 - calcularPercentuaDeDesconto())  / 100;
-        this.frete = calcularFrete() * (100 - calcularPercentuaDeDescontoDoFrete())/100;
-        this.icms = calcularICMS(valorProdutos);
-        this.impostoMunicipal = calcularImpostoMunicipal(valorProdutos);
-        this.cashbackGerado = valorProdutos * calcularCashback();
-        this.valorTotal = valorProdutos - desconto + frete + icms + impostoMunicipal;
-        cliente.adicionarCashback(cashbackGerado);
-    }
+    //private void calcularValores() {
+    //    double valorProdutos = produtos.stream().mapToDouble(Produto::getValorVenda).sum();
+    //    this.desconto = valorProdutos * (100 - calcularPercentuaDeDesconto())  / 100;
+    //    this.frete = calcularFrete() * (100 - calcularPercentuaDeDescontoDoFrete())/100;
+    //    this.icms = calcularICMS(valorProdutos);
+    //    this.impostoMunicipal = calcularImpostoMunicipal(valorProdutos);
+    //    this.cashbackGerado = valorProdutos * calcularCashback();
+    //    this.valorTotal = valorProdutos - desconto + frete + icms + impostoMunicipal;
+    //    cliente.adicionarCashback(cashbackGerado);
+    //}
 
     public Boolean ehCartaoDaEmpresa() {
       return numCartao.startsWith("429613");
@@ -120,12 +120,12 @@ public class Venda {
         }
     }
 
-    private double calcularICMS(double valorProdutos) {
-        return cliente.getEndereco().getEstado().equals("DF") ? valorProdutos * 0.18 : valorProdutos * 0.12;
+    public int calcularICMS() {
+        return cliente.getEndereco().getEstado().equals("DF") ? 18 : 12;
     }
 
-    private double calcularImpostoMunicipal(double valorProdutos) {
-        return cliente.getEndereco().getEstado().equals("DF") ? 0.0 : valorProdutos * 0.04;
+    public int calcularImpostoMunicipal() {
+        return cliente.getEndereco().getEstado().equals("DF") ? 0 :  4 ;
     }
 
     public int calcularCashback() {
