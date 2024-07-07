@@ -39,7 +39,7 @@ public class Venda {
         this.frete = calcularFrete() * (100 - calcularPercentuaDeDescontoDoFrete())/100;
         this.icms = calcularICMS(valorProdutos);
         this.impostoMunicipal = calcularImpostoMunicipal(valorProdutos);
-        this.cashbackGerado = calcularCashback(valorProdutos);
+        this.cashbackGerado = valorProdutos * calcularCashback();
         this.valorTotal = valorProdutos - desconto + frete + icms + impostoMunicipal;
         cliente.adicionarCashback(cashbackGerado);
     }
@@ -52,9 +52,13 @@ public class Venda {
 
     public int calcularPercentuaDeDesconto() {
 
-        int desconto = 0;
 
-        if (cliente.getTipo().equals("especial") && ehCartaoDaEmpresa())
+        if ( !cliente.getTipo().equals("especial"))
+          return 0;
+
+        int desconto = 10;
+
+        if (ehCartaoDaEmpresa())
           desconto += 10;
 
 
@@ -124,11 +128,11 @@ public class Venda {
         return cliente.getEndereco().getEstado().equals("DF") ? 0.0 : valorProdutos * 0.04;
     }
 
-    private double calcularCashback(double valorProdutos) {
+    public int calcularCashback() {
         if (cliente.getTipo().equals("prime")) {
-            return ehCartaoDaEmpresa() ? valorProdutos * 0.05 : valorProdutos * 0.03;
+            return ehCartaoDaEmpresa() ? 5 : 3;
         }
-        return 0.0;
+        return 0;
     }
 
     public Date getData() {
