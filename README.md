@@ -43,7 +43,7 @@ Aplicamos a técnica de triangulação para desenvolver soluções incrementais 
 Este trabalho foi construído utilizando o Maven. Para executar os testes, utilize o comando abaixo:
 
 ```bash
-mvn run
+mvn test
 ```
 Outra opção é executando pelo Eclipse, basta rodar a classe de teste desejada
 
