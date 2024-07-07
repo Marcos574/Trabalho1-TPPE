@@ -5,10 +5,15 @@ import java.util.List;
 
 
 public class Venda {
+
     private Date data;
     private Cliente cliente;
     private List<Produto> produtos;
-    private String metodoPagamento;
+    private String numCartao;
+
+
+
+    // valores derivados
     private double valorTotal;
     private double desconto;
     private double icms;
@@ -16,18 +21,22 @@ public class Venda {
     private double frete;
     private double cashbackGerado;
 
-    public Venda(Date data, Cliente cliente, List<Produto> produtos, String metodoPagamento) {
+
+
+    public Venda(Date data, Cliente cliente, List<Produto> produtos, String numCartao) {
         this.data = data;
         this.cliente = cliente;
         this.produtos = produtos;
-        this.metodoPagamento = metodoPagamento;
+        this.numCartao = numCartao;
         calcularValores();
     }
 
+
+
     private void calcularValores() {
         double valorProdutos = produtos.stream().mapToDouble(Produto::getValorVenda).sum();
-        this.desconto = calcularDesconto(valorProdutos);
-        this.frete = calcularFrete();
+        this.desconto = valorProdutos * (100 - calcularPercentuaDeDesconto())  / 100;
+        this.frete = calcularFrete() * (100 - calcularPercentuaDeDescontoDoFrete())/100;
         this.icms = calcularICMS(valorProdutos);
         this.impostoMunicipal = calcularImpostoMunicipal(valorProdutos);
         this.cashbackGerado = calcularCashback(valorProdutos);
@@ -35,31 +44,46 @@ public class Venda {
         cliente.adicionarCashback(cashbackGerado);
     }
 
-    private double calcularDesconto(double valorProdutos) {
-        double desconto = 0.0;
-        if (cliente.getTipo().equals("especial")) {
-            desconto += valorProdutos * 0.10;
-            if (metodoPagamento.startsWith("429613")) {
-                desconto += valorProdutos * 0.10;
-            }
-            desconto += calcularFrete() * 0.30;
-        } else if (cliente.getTipo().equals("prime")) {
-            desconto += calcularFrete();
-        }
+    public Boolean ehCartaoDaEmpresa() {
+      return numCartao.startsWith("429613");
+    }
+
+
+
+    public int calcularPercentuaDeDesconto() {
+
+        int desconto = 0;
+
+        if (cliente.getTipo().equals("especial") && ehCartaoDaEmpresa())
+          desconto += 10;
+
+
         return desconto;
     }
 
-    private double calcularFrete() {
+    public int calcularPercentuaDeDescontoDoFrete(){
+
+        if ( cliente.getTipo().equals("especial"))
+          return 30;
+
+        else if (  cliente.getTipo().equals("prime"))
+          return 100;
+
+      return 0;
+
+    }
+
+    public int calcularFrete() {
         String estado = cliente.getEndereco().getEstado();
         boolean capital = cliente.getEndereco().isCapital();
-        
+
         switch (estado) {
             case "DF":
-                return 5.0;
+                return 5;
             case "GO":
             case "MS":
             case "MT":
-                return capital ? 10.0 : 13.0;
+                return capital ? 10 : 13;
             case "BA":
             case "PE":
             case "MA":
@@ -69,7 +93,7 @@ public class Venda {
             case "PI":
             case "SE":
             case "AL":
-                return capital ? 15.0 : 18.0;
+                return capital ? 15 : 18;
             case "AM":
             case "PA":
             case "AP":
@@ -77,18 +101,18 @@ public class Venda {
             case "RO":
             case "RR":
             case "TO":
-                return capital ? 20.0 : 25.0;
+                return capital ? 20 : 25;
             case "SP":
             case "RJ":
             case "ES":
             case "MG":
-                return capital ? 7.0 : 10.0;
+                return capital ? 7: 10;
             case "RS":
             case "SC":
             case "PR":
-                return capital ? 10.0 : 13.0;
+                return capital ? 10 : 13;
             default:
-                return 0.0;
+                return 0;
         }
     }
 
@@ -102,7 +126,7 @@ public class Venda {
 
     private double calcularCashback(double valorProdutos) {
         if (cliente.getTipo().equals("prime")) {
-            return metodoPagamento.startsWith("429613") ? valorProdutos * 0.05 : valorProdutos * 0.03;
+            return ehCartaoDaEmpresa() ? valorProdutos * 0.05 : valorProdutos * 0.03;
         }
         return 0.0;
     }
@@ -119,8 +143,8 @@ public class Venda {
         return produtos;
     }
 
-    public String getMetodoPagamento() {
-        return metodoPagamento;
+    public String getNumCartao() {
+        return numCartao;
     }
 
     public double getValorTotal() {

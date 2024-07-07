@@ -1,6 +1,7 @@
 package com.tppe.app;
 
 public class Cliente {
+
     private String nome;
     private String tipo; // "padrão", "especial" ou "prime"
     private Endereco endereco;
