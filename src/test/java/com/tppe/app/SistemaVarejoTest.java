@@ -1,6 +1,5 @@
 package com.tppe.app;
 
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -17,12 +16,12 @@ public class SistemaVarejoTest {
 
     private SistemaVarejo sistema = new SistemaVarejo();
     private String testName;
-    private Object input;
-    private Object expectedOutput;
+    private Venda venda;
+    private double expectedOutput;
 
-    public SistemaVarejoTest(String testName, Object input, Object expectedOutput) {
+    public SistemaVarejoTest(String testName, Venda venda, double expectedOutput) {
         this.testName = testName;
-        this.input = input;
+        this.venda = venda;
         this.expectedOutput = expectedOutput;
     }
 
@@ -36,41 +35,62 @@ public class SistemaVarejoTest {
         Produto produto1 = new Produto("001", "Produto 1", 10.0, "unidade");
         Produto produto2 = new Produto("002", "Produto 2", 20.0, "unidade");
 
-        Venda venda1 = new Venda(new Date(), cliente1, Arrays.asList(produto1), "dinheiro");
-        Venda venda2 = new Venda(new Date(), cliente2, Arrays.asList(produto2), "cartão");
-        Venda venda3 = new Venda(new Date(), cliente3, Arrays.asList(produto1, produto2), "boleto");
+        Venda venda1 = new Venda(new Date(), cliente1, Arrays.asList(produto1), "4296130000000000"); // Cartão da empresa
+        Venda venda2 = new Venda(new Date(), cliente2, Arrays.asList(produto2), "1234567890123456"); // Outro cartão
+        Venda venda3 = new Venda(new Date(), cliente3, Arrays.asList(produto1, produto2), "4296131234567890"); // Cartão da empresa
 
         return Arrays.asList(new Object[][]{
-            {"deveCadastrarCliente", cliente1, 1},
-            {"deveCadastrarProduto", produto1, 1},
-            {"deveRealizarVenda", venda1, 1},
-            {"deveRealizarVenda", venda2, 1},
-            {"deveRealizarVenda", venda3, 1}
+            {"deveCalcularDescontoVenda1", venda1, 0.0},
+            {"deveCalcularDescontoVenda2", venda2, 2.0}, // 10% desconto especial
+            {"deveCalcularDescontoVenda3", venda3, 0.0},
+            {"deveCalcularFreteVenda1", venda1, 7.0},
+            {"deveCalcularFreteVenda2", venda2, 4.0}, // 30% de desconto no frete
+            {"deveCalcularFreteVenda3", venda3, 0.0}, // Frete grátis para clientes "prime"
+            {"deveCalcularICMSVenda1", venda1, 1.2},
+            {"deveCalcularICMSVenda2", venda2, 2.4},
+            {"deveCalcularICMSVenda3", venda3, 3.6},
+            {"deveCalcularImpostoMunicipalVenda1", venda1, 0.4},
+            {"deveCalcularImpostoMunicipalVenda2", venda2, 0.8},
+            {"deveCalcularImpostoMunicipalVenda3", venda3, 1.2},
+            {"deveCalcularCashbackVenda1", venda1, 0.0},
+            {"deveCalcularCashbackVenda2", venda2, 0.0},
+            {"deveCalcularCashbackVenda3", venda3, 1.5}, // 5% cashback para cliente "prime" com cartão da empresa
         });
     }
 
     @Test
     public void testSistemaVarejo() {
+        sistema.cadastrarCliente(venda.getCliente());
+        for (Produto produto : venda.getProdutos()) {
+            sistema.cadastrarProduto(produto);
+        }
+        sistema.realizarVenda(venda);
+
         switch (testName) {
-            case "deveCadastrarCliente":
-                sistema.cadastrarCliente((Cliente) input);
-                assertEquals(expectedOutput, sistema.getClientes().size());
-                assertEquals(input, sistema.getClientes().get(0));
+            case "deveCalcularDescontoVenda1":
+            case "deveCalcularDescontoVenda2":
+            case "deveCalcularDescontoVenda3":
+                assertEquals(expectedOutput, venda.getDesconto(), 0.01);
                 break;
-            case "deveCadastrarProduto":
-                sistema.cadastrarProduto((Produto) input);
-                assertEquals(expectedOutput, sistema.getProdutos().size());
-                assertEquals(input, sistema.getProdutos().get(0));
+            case "deveCalcularFreteVenda1":
+            case "deveCalcularFreteVenda2":
+            case "deveCalcularFreteVenda3":
+                assertEquals(expectedOutput, venda.getFrete(), 0.01);
                 break;
-            case "deveRealizarVenda":
-                sistema.cadastrarCliente(((Venda) input).getCliente());
-                sistema.cadastrarProduto(((Venda) input).getProdutos().get(0));
-                if (((Venda) input).getProdutos().size() > 1) {
-                    sistema.cadastrarProduto(((Venda) input).getProdutos().get(1));
-                }
-                sistema.realizarVenda((Venda) input);
-                assertEquals(expectedOutput, sistema.getVendas().size());
-                assertEquals(input, sistema.getVendas().get(0));
+            case "deveCalcularICMSVenda1":
+            case "deveCalcularICMSVenda2":
+            case "deveCalcularICMSVenda3":
+                assertEquals(expectedOutput, venda.getICMS(), 0.01);
+                break;
+            case "deveCalcularImpostoMunicipalVenda1":
+            case "deveCalcularImpostoMunicipalVenda2":
+            case "deveCalcularImpostoMunicipalVenda3":
+                assertEquals(expectedOutput, venda.getImpostoMunicipal(), 0.01);
+                break;
+            case "deveCalcularCashbackVenda1":
+            case "deveCalcularCashbackVenda2":
+            case "deveCalcularCashbackVenda3":
+                assertEquals(expectedOutput, venda.getCashbackGerado(), 0.01);
                 break;
         }
     }
