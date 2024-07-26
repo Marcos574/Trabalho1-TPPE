@@ -12,6 +12,8 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.Collection;
 
+
+// Nesta classe estão os testes somente do cadastro de produtos
 @RunWith(Parameterized.class)
 public class ProdutoTest {
 

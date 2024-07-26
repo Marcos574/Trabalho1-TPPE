@@ -34,7 +34,8 @@ public class ClienteTest {
         this.usedCashback = usedCashback;
         this.expectedCashback = expectedCashback;
     }
-
+    
+    // Os testes dessa classe tem como objetivo testar somente a criação do cliente, por isso atributos do cashback foram adicionados manualmente
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{

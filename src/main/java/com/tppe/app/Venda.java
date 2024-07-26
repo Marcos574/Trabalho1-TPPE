@@ -26,7 +26,7 @@ public class Venda {
         calcularValores();
     }
 
-    private void calcularValores() {
+    void calcularValores() {
         double valorProdutos = produtos.stream().mapToDouble(Produto::getValorVenda).sum();
         this.desconto = valorProdutos * calcularPercentuaDeDesconto() / 100;
         this.frete = calcularFrete() * (100 - calcularPercentuaDeDescontoDoFrete()) / 100;

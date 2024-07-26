@@ -11,6 +11,9 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
+
+// Aqui estão os testes mais significativos, relacionados à operações que são feitas no sistema de varejo,
+// aqui são testados os cálculos e descontos que uma venda deve gerar, desde o frete até o ICMS
 @RunWith(Parameterized.class)
 public class SistemaVarejoTest {
 
@@ -24,7 +27,8 @@ public class SistemaVarejoTest {
         this.venda = venda;
         this.expectedOutput = expectedOutput;
     }
-
+    
+    // Criando os clientes, produtos e vendas necessários para o teste
     @Parameters(name = "{index}: {0}")
     public static Collection<Object[]> data() {
         Endereco endereco = new Endereco("SP", true);
@@ -38,7 +42,8 @@ public class SistemaVarejoTest {
         Venda venda1 = new Venda(new Date(), cliente1, Arrays.asList(produto1), "4296130000000000"); // Cartão da empresa
         Venda venda2 = new Venda(new Date(), cliente2, Arrays.asList(produto2), "1234567890123456"); // Outro cartão
         Venda venda3 = new Venda(new Date(), cliente3, Arrays.asList(produto1, produto2), "4296131234567890"); // Cartão da empresa
-
+        
+        // Criando uma lista com cada objeto sendo oque deve ser testado, qual venda está relacionada ao teste e a saída esperada
         return Arrays.asList(new Object[][]{
             {"deveCalcularDescontoVenda1", venda1, 0.0},
             {"deveCalcularDescontoVenda2", venda2, 2.0}, // 10% desconto especial
@@ -57,7 +62,9 @@ public class SistemaVarejoTest {
             {"deveCalcularCashbackVenda3", venda3, 1.5}, // 5% cashback para cliente "prime" com cartão da empresa
         });
     }
-
+    
+    //Neste momento os testes são feitos de fato, utilizando a lista criada anteriormente como base, 
+    // usando as saídas esperadas e comparando com a saída obtida pelo método que desejo testar
     @Test
     public void testSistemaVarejo() {
         sistema.cadastrarCliente(venda.getCliente());
