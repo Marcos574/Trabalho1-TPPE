@@ -54,6 +54,17 @@ public class VendaTest {
             {new Date(), new Cliente("cesar"  , "padrão",   new Endereco("GO", false)), List.of(new Produto("12", "pasta", 20.20,"12")), "4296130000000000", true, 13, 0, 0, 0, 4, 12},
             {new Date(), new Cliente("rita"   , "especial", new Endereco("DF", true)), List.of(new Produto("12", "pasta", 20.20,"12")), "7296130000000000", false, 5, 30, 10, 0, 0, 18 },
             {new Date(), new Cliente("julio"  , "especial", new Endereco("SE", true)), List.of(new Produto("12", "pasta", 20.20,"12")), "7296130000000000", false, 15, 30, 10, 0, 4, 12},
+
+            {new Date(), new Cliente("julio"  , "especial", new Endereco("SE", true)), 
+              List.of(
+                new Produto("12", "pasta", 20,"12"),
+                new Produto("13", "sabonete", 25,"12"),
+                new Produto("14", "escova", 2,"12"),
+                new Produto("15", "barbeador", 100,"12")
+
+              ),
+            "7296130000000000", false, 15, 30, 10, 0, 4, 12
+            },
         });
     }
 
