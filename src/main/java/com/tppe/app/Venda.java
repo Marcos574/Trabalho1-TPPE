@@ -1,3 +1,4 @@
+// Venda.java
 package com.tppe.app;
 
 import java.util.Date;
@@ -18,22 +19,26 @@ public class Venda {
     private double frete;
     private double cashbackGerado;
 
+    private FreteCalculator freteCalculator;
+
     public Venda(Date data, Cliente cliente, List<Produto> produtos, String numCartao) {
         this.data = data;
         this.cliente = cliente;
         this.produtos = produtos;
         this.numCartao = numCartao;
+        this.freteCalculator = new FreteCalculator();
         calcularValores();
     }
 
     void calcularValores() {
-        double valorProdutos = produtos.stream().mapToDouble(Produto::getValorVenda).sum();
-        this.desconto = valorProdutos * calcularPercentuaDeDesconto() / 100;
-        this.frete = calcularFrete() * (100 - calcularPercentuaDeDescontoDoFrete()) / 100;
-        this.icms = calcularICMS() * valorProdutos / 100;
-        this.impostoMunicipal = calcularImpostoMunicipal() * valorProdutos / 100;
-        this.cashbackGerado = valorProdutos * calcularCashback() / 100;
-        this.valorTotal = valorProdutos - desconto + frete + icms + impostoMunicipal;
+        CalcularValores calculo = new CalcularValores(cliente, produtos, numCartao, freteCalculator);
+        calculo.execute();
+        this.valorTotal = calculo.getValorTotal();
+        this.desconto = calculo.getDesconto();
+        this.icms = calculo.getIcms();
+        this.impostoMunicipal = calculo.getImpostoMunicipal();
+        this.frete = calculo.getFrete();
+        this.cashbackGerado = calculo.getCashbackGerado();
         cliente.adicionarCashback(cashbackGerado);
     }
 
@@ -52,48 +57,6 @@ public class Venda {
         if (cliente.getTipo().equals("especial")) return 30;
         else if (cliente.getTipo().equals("prime")) return 100;
         return 0;
-    }
-
-    public int calcularFrete() {
-        String estado = cliente.getEndereco().getEstado();
-        boolean capital = cliente.getEndereco().isCapital();
-        switch (estado) {
-            case "DF":
-                return 5;
-            case "GO":
-            case "MS":
-            case "MT":
-                return capital ? 10 : 13;
-            case "BA":
-            case "PE":
-            case "MA":
-            case "CE":
-            case "RN":
-            case "PB":
-            case "PI":
-            case "SE":
-            case "AL":
-                return capital ? 15 : 18;
-            case "AM":
-            case "PA":
-            case "AP":
-            case "AC":
-            case "RO":
-            case "RR":
-            case "TO":
-                return capital ? 20 : 25;
-            case "SP":
-            case "RJ":
-            case "ES":
-            case "MG":
-                return capital ? 7 : 10;
-            case "RS":
-            case "SC":
-            case "PR":
-                return capital ? 10 : 13;
-            default:
-                return 0;
-        }
     }
 
     public int calcularICMS() {
