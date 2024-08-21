@@ -9,16 +9,16 @@ Critérios:
 
 |            | Nota (%) | Comentários                                          |
 |:----------:|:--------:|:-----------------------------------------------------|
-| Critério 1 | 40       | CadastroCliente, CadastroProduto, calcular total vendas ultimo mes |
-| Critério 2 | 40       | Sim, para as funcionalidades implementadas.          |
-| Critério 3 | 40       | Idem acima.                                          |
-| Critério 4 | 50       |                                                      |
+| Critério 1 | 100      | CadastroCliente, CadastroProduto, calcular total vendas ultimo mes |
+| Critério 2 | 100      | Sim, para as funcionalidades implementadas.          |
+| Critério 3 | 100      | Idem acima.                                          |
+| Critério 4 | 100      |                                                      |
 
 
-R1: NOk - Cadastrar clientes dos três diferentes tipos (padrão, especial e prime).
-R2: NOk - Cadastrar diferentes tipos de produtos.
+R1: Ok - Cadastrar clientes dos três diferentes tipos (padrão, especial e prime).
+R2: Ok - Cadastrar diferentes tipos de produtos.
 R3: Ok - Realizar a venda de itens para os clientes (produtos, cliente, frete, descontos, ICMS e imposto municipal)
-R4: NOk - Calcular valor das vendas do último mês.
+R4: Ok - Calcular valor das vendas do último mês.
 R5: Ok - Calcular o saldo de cashback para clientes-prime.
 
 Observações: Requisito 3 implementado em diversos testes da classe VendaTest
